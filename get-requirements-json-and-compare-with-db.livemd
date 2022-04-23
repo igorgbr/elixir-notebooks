@@ -5,7 +5,7 @@
 ### Insira aqui o nome do projeto:
 
 ```elixir
-nome_projeto = "sd-0x-stranger-things"
+nome_projeto = "sd-0x-project-talker-manager"
 ```
 
 ```elixir
@@ -25,10 +25,10 @@ defmodule Repo do
 end
 
 Application.put_env(:my_app, Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "postgres",
-  hostname: "postgres",
+  username: "Postgres",
+  password: "Postgres",
+  database: "Postgres",
+  hostname: "Postgres",
   port: 5432,
   pool_size: 5
 )
@@ -49,60 +49,77 @@ Ecto.Query
 Aqui iniciamos o client para acessar o repositorio.
 
 ```elixir
-access_token = "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"
+access_token = "<meu_token>"
 client = Tentacat.Client.new(%{access_token: access_token})
 ```
 
 ---
 
-## Inicio da lógica
+## Inicio
 
 ```elixir
-{200, %{"content" => content, "sha" => sha}, _} =
-  Tentacat.Contents.find(client, "betrybe", nome_projeto, ".trybe/requirements.json")
-```
+defmodule Requirements do
+  def getFileFromRepository(client, nome_projeto) do
+    getFile(client, nome_projeto)
+    |> createMap()
+    |> createList()
+  end
 
-Aqui pegamos cada requisito e colocamos em uma lista
+  def getDataFromBd(nome_projeto) do
+    [result | _] =
+      from("project_templates", where: [name: ^nome_projeto], select: [:id])
+      |> Repo.all()
 
-```elixir
-result =
-  content
-  |> String.split("\n")
-  |> Stream.map(fn line ->
-    {:ok, decoded} = Base.decode64(line)
-    decoded
-  end)
-  |> Enum.join()
-  |> Poison.Parser.parse!()
+    from("project_template_requirements",
+      where: [project_template_id: ^result.id],
+      select: [:description]
+    )
+    |> Repo.all()
+    |> Enum.map(fn map -> map.description end)
+  end
 
-requisitos_template = Enum.map(result["requirements"], fn map -> map["description"] end)
-```
+  defp getFile(client, nome_projeto) do
+    {200, %{"content" => content, "sha" => _sha}, _} =
+      Tentacat.Contents.find(client, "betrybe", nome_projeto, ".trybe/requirements.json")
 
-## Requisitando a tabela project_template_requirements
+    content
+  end
 
-Aqui pegamos os requisitos que estão na tabela project_template_requirements
-e colocamos em uma lista
+  defp createMap(content) do
+    content
+    |> String.split("\n")
+    |> Stream.map(fn line ->
+      {:ok, decoded} = Base.decode64(line)
+      decoded
+    end)
+    |> Enum.join()
+    |> Poison.Parser.parse!()
+  end
 
-```elixir
-[result | _] =
-  from("project_templates", where: [name: ^nome_projeto], select: [:id])
-  |> Repo.all()
-
-requisitos_banco =
-  from("project_template_requirements",
-    where: [project_template_id: ^result.id],
-    select: [:description]
-  )
-  |> Repo.all()
-  |> Enum.map(fn map -> map.description end)
+  defp createList(result) do
+    Enum.map(result["requirements"], fn map -> map["description"] end)
+  end
+end
 ```
 
 ---
 
 <!-- livebook:{"break_markdown":true} -->
 
-Aqui verificamos se os requisitos do arquivo são iguais aos do banco.
+Aqui guardamos os requisitos de requirements.json em uma lista
 
 ```elixir
-requisitos_banco === requisitos_template
+reqFile = Requirements.getFileFromRepository(client, nome_projeto)
+```
+
+Aqui guardamos os requisitos da tabela project_template_requirements em uma lista
+
+```elixir
+reqBD = Requirements.getDataFromBd(nome_projeto)
+```
+
+Aqui comparamos se os dados são iguais
+
+```elixir
+reqFile === reqBD
 ```
