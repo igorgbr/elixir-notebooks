@@ -1,3 +1,8 @@
+<!-- vim: syntax=markdown -->
+
+<!-- livebook:{"persist_outputs":true} -->
+
+
 # Salva o conteudo do arquivo requirements.json
 
 ## Instala e configura lib's
