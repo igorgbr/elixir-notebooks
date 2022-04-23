@@ -1,0 +1,108 @@
+# Salva o conteudo do arquivo requirements.json
+
+## Instala e configura lib's
+
+### Insira aqui o nome do projeto:
+
+```elixir
+nome_projeto = "sd-0x-stranger-things"
+```
+
+```elixir
+Mix.install([
+  {:tentacat, "~> 2.2"},
+  {:ecto_sql, "~> 3.7"},
+  {:postgrex, "~> 0.16.1"},
+  {:poison, "~> 5.0"}
+])
+```
+
+Iniciamos aqui o banco de dados.
+
+```elixir
+defmodule Repo do
+  use Ecto.Repo, adapter: Ecto.Adapters.Postgres, otp_app: :my_app
+end
+
+Application.put_env(:my_app, Repo,
+  username: "postgres",
+  password: "postgres",
+  database: "postgres",
+  hostname: "postgres",
+  port: 5432,
+  pool_size: 5
+)
+
+Application.ensure_all_started(:ecto_sql)
+Application.ensure_all_started(:postgrex)
+Repo.__adapter__().storage_down(Repo.config())
+Repo.__adapter__().storage_up(Repo.config())
+Repo.start_link()
+
+import Ecto.Query
+```
+
+```elixir
+Ecto.Query
+```
+
+Aqui iniciamos o client para acessar o repositorio.
+
+```elixir
+access_token = "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"
+client = Tentacat.Client.new(%{access_token: access_token})
+```
+
+---
+
+## Inicio da lógica
+
+```elixir
+{200, %{"content" => content, "sha" => sha}, _} =
+  Tentacat.Contents.find(client, "betrybe", nome_projeto, ".trybe/requirements.json")
+```
+
+Aqui pegamos cada requisito e colocamos em uma lista
+
+```elixir
+result =
+  content
+  |> String.split("\n")
+  |> Stream.map(fn line ->
+    {:ok, decoded} = Base.decode64(line)
+    decoded
+  end)
+  |> Enum.join()
+  |> Poison.Parser.parse!()
+
+requisitos_template = Enum.map(result["requirements"], fn map -> map["description"] end)
+```
+
+## Requisitando a tabela project_template_requirements
+
+Aqui pegamos os requisitos que estão na tabela project_template_requirements
+e colocamos em uma lista
+
+```elixir
+[result | _] =
+  from("project_templates", where: [name: ^nome_projeto], select: [:id])
+  |> Repo.all()
+
+requisitos_banco =
+  from("project_template_requirements",
+    where: [project_template_id: ^result.id],
+    select: [:description]
+  )
+  |> Repo.all()
+  |> Enum.map(fn map -> map.description end)
+```
+
+---
+
+<!-- livebook:{"break_markdown":true} -->
+
+Aqui verificamos se os requisitos do arquivo são iguais aos do banco.
+
+```elixir
+requisitos_banco === requisitos_template
+```
