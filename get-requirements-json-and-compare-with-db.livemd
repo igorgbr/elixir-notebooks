@@ -2,6 +2,7 @@
 
 <!-- livebook:{"persist_outputs":true} -->
 
+[![Run in Livebook](https://livebook.dev/badge/v1/black.svg)](https://livebook.dev/run?url=https%3A%2F%2Fgithub.com%2Figorgbr%2Felixir-notebooks%2Fblob%2Fmain%2Fget-requirements-json-and-compare-with-db.livemd)
 
 # Salva o conteudo do arquivo requirements.json
 
