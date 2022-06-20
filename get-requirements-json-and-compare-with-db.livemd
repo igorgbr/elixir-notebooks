@@ -1,17 +1,19 @@
+# Salva o conteudo do arquivo requirements.json
+
+## Section
+
 <!-- vim: syntax=markdown -->
 
-<!-- livebook:{"persist_outputs":true} -->
+<!-- livebook:{"break_markdown":true} -->
 
 [![Run in Livebook](https://livebook.dev/badge/v1/black.svg)](https://livebook.dev/run?url=https%3A%2F%2Fgithub.com%2Figorgbr%2Felixir-notebooks%2Fblob%2Fmain%2Fget-requirements-json-and-compare-with-db.livemd)
-
-# Salva o conteudo do arquivo requirements.json
 
 ## Instala e configura lib's
 
 ### Insira aqui o nome do projeto:
 
 ```elixir
-nome_projeto = "sd-0x-project-talker-manager"
+nome_projeto = "sd-0x-store-manager"
 ```
 
 ```elixir
@@ -31,10 +33,10 @@ defmodule Repo do
 end
 
 Application.put_env(:my_app, Repo,
-  username: "Postgres",
-  password: "Postgres",
-  database: "Postgres",
-  hostname: "Postgres",
+  username: "evaluator",
+  password: "jkSRLBk8B666nBRZVrtrJHsPkv87t42K",
+  database: "trybe_evaluation",
+  hostname: "segment-warehouse.db.betrybe.com",
   port: 5432,
   pool_size: 5
 )
@@ -55,7 +57,7 @@ Ecto.Query
 Aqui iniciamos o client para acessar o repositorio.
 
 ```elixir
-access_token = "<meu_token>"
+access_token = "github_token"
 client = Tentacat.Client.new(%{access_token: access_token})
 ```
 
