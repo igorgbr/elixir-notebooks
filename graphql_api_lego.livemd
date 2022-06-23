@@ -12,27 +12,29 @@ Mix.install([
 ```elixir
 defmodule Courses.GraphQL do
   @endpoint ~s(https://lms.betrybe.dev/admin/graphiql)
-  @token ~s(token_com_role_admin-lego)
+  @token ~s(token)
 
-  def list_courses() do
+  def list_courses(active) do
     payload =
       %{
+        variables: %{active: active},
         query: ~S"""
-        query courses($active: true) {
-          active
-        courseThemes {
-        courseId
-        id
-        order
-        themeId
+        query GetCourses($active: Boolean!) {
+          courses(active: $active) {
+            active
+            courseModules {
+              courseId
+              id
+              moduleId
+              Order
+            }
+            id
+
+            title
+
+          }
         }
-        features
-        id
-        imageUrl
-        slug
-        title
-        type
-        }
+
         """
       }
       |> Jason.encode!()
