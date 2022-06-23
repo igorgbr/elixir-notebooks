@@ -12,7 +12,7 @@ Mix.install([
 ```elixir
 defmodule Courses.GraphQL do
   @endpoint ~s(https://lms.betrybe.dev/admin/graphiql)
-  @token ~s(token)
+  @token ~s(eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik9VUTVSa0pDTXpBeE1FWTBPRGt5TkVFME1FVkJSRGczUTBZeU56a3lRVEF6UXpoRlJqRTJSUSJ9.eyJodHRwczovL2FwaS5iZXRyeWJlLmRldi9hcHBfbWV0YWRhdGEiOnsidXVpZCI6IjY5Yzc4NWM3LWNiNTctNGUxMi05NzE1LWM5MGI2MGM4YWI4MyJ9LCJodHRwczovL2FwaS5iZXRyeWJlLmRldi9uYW1lIjoiSWdvciBQZXJlaXJhIiwiaHR0cHM6Ly9hcGkuYmV0cnliZS5kZXYvY3JlYXRlZF9hdCI6IjIwMjItMDEtMjdUMTk6MDE6NDMuOTkzWiIsImh0dHBzOi8vYXBpLmJldHJ5YmUuZGV2L3JvbGVzIjpbImFkbWluLWhhcmQtc2tpbGxzIiwiYWRtaW4tbGVnbyIsInNkLWNvaG9ydC10ZXN0Iiwic3R1ZGVudCJdLCJodHRwczovL2FwaS5iZXRyeWJlLmRldi9jb25uZWN0aW9uIjoiVXNlcm5hbWUtUGFzc3dvcmQtQXV0aGVudGljYXRpb24iLCJpc3MiOiJodHRwczovL3RyeWJlLWludGVybmFsLWF1dGguYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDYxZjJlYzE3ZjlmMjA3MDA3MmNmMDg5OSIsImF1ZCI6WyJodHRwczovL3RyeWJlLWludGVybmFsLWF1dGguYXV0aDAuY29tL2FwaS92Mi8iLCJodHRwczovL3RyeWJlLWludGVybmFsLWF1dGguYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTY1NjAxMTI2MywiZXhwIjoxNjU2MDk3NjYzLCJhenAiOiJYdVhjOVFqbDllN1p4VjVvU2FNdGozVnp0azRhMjJRayIsInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUgcmVhZDpjdXJyZW50X3VzZXIgdXBkYXRlOmN1cnJlbnRfdXNlcl9tZXRhZGF0YSBkZWxldGU6Y3VycmVudF91c2VyX21ldGFkYXRhIGNyZWF0ZTpjdXJyZW50X3VzZXJfbWV0YWRhdGEgY3JlYXRlOmN1cnJlbnRfdXNlcl9kZXZpY2VfY3JlZGVudGlhbHMgZGVsZXRlOmN1cnJlbnRfdXNlcl9kZXZpY2VfY3JlZGVudGlhbHMgdXBkYXRlOmN1cnJlbnRfdXNlcl9pZGVudGl0aWVzIG9mZmxpbmVfYWNjZXNzIiwiZ3R5IjoicGFzc3dvcmQifQ.VHVUWAAwOUPljO4uYVMQMWYisRKq4yqHcMSlo4JV7knymRdIK12ZnPMfYQrIK688HpN10FvYp4cHJGu3kKZwCBLmGfGqx56KbVcqdAO8zBPAWdVfyVkU0W_9TV1icfpM0qY6JyqWapVvFfN7Ell1WBMSjmLa1R7HCP1LcoOzKFeQOHh5aS5IX90p3CHRwvAZm2w_Chqxz8HNW_SuB7LJPoQlGILRpAdp3hGLrSJqU6ZgUMxnV5nv6Xze4EolLl_HcqHsgixLVXw5h8kcHqNSuAJuKVEZOixG9xSA4cU1h2w9bnRd7DICAewbB7IkKQ8CXOhE1v2Pb7RClUbEc6swNA)
 
   def list_courses(active) do
     payload =
@@ -29,9 +29,7 @@ defmodule Courses.GraphQL do
               Order
             }
             id
-
             title
-
           }
         }
 
@@ -55,5 +53,5 @@ end
 ```
 
 ```elixir
-Courses.GraphQL.list_courses()
+Courses.GraphQL.list_courses(true)
 ```
